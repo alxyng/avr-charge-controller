@@ -17,7 +17,7 @@ void uart_init() {
     #endif
     */
 
-    UCSRC = (1 << URSEL) | (1 << UCSZ1) | (1 << UCSZ0); // 8-bit data
+    UCSRC = (1 << UCSZ1) | (1 << UCSZ0); // 8-bit data
     UCSRB = (1 << RXEN) | (1 << TXEN);   // Enable RX and TX
 }
 
