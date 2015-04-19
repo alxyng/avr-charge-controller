@@ -4,8 +4,6 @@ void adc_init() {
     ADCSRA |= (1 << ADPS2) | (1 << ADPS2); // ADC at 125KHz sample rate at 8MHz (prescalar at 64)
     ADMUX |= (1 << REFS0); // Set reference voltage to AVCC
 
-    //ADMUX |= (1 << ADLAR); // Left adjust ADC result to allow easy 8 bit reading
-
     // No MUX values needed to be changed to use ADC0
     //ADMUX |= (1 << MUX0);
 
