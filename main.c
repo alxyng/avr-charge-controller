@@ -15,8 +15,15 @@ int main() {
     //char c;
 
 	while (1) {
-        printf("You wrote %d\n", 123);
-        //_delay_ms(250);
+        //printf("You wrote %d\n", 123);
+        uart_putchar('A');
+        _delay_ms(250);
+        uart_putchar('L');
+        _delay_ms(250);
+        uart_putchar('E');
+        _delay_ms(250);
+        uart_putchar('X');
+        _delay_ms(250);
     }
 
     return 0;
