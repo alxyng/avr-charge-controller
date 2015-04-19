@@ -1,6 +1,5 @@
 #include <stdio.h>
 
-#include "main.h"
 #include "uart.h"
 
 #define F_CPU 8000000UL // 8 MHz
