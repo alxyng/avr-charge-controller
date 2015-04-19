@@ -1,0 +1,5 @@
+*.o
+.DS_Store
+main.hex
+main.map
+main.out
