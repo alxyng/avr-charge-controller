@@ -9,16 +9,19 @@ main.hex: main.out
 	avr-size main.out
 	avr-objcopy -R .eeprom -O ihex main.out main.hex
 
-main.out: main.o adc.o uart.o
-	avr-gcc -g -mmcu=atmega8 -o main.out -Wl,-u,vfprintf -lprintf_flt -lm -Wl,-Map,main.map main.o adc.o uart.o
+main.out: main.o adc.o led.o uart.o
+	avr-gcc -g -mmcu=atmega8 -o main.out -Wl,-u,vfprintf -lprintf_flt -lm -Wl,-Map,main.map main.o adc.o led.o uart.o
 
 main.o: main.c
 	avr-gcc -g -mmcu=atmega8 -Wall -Os -c main.c
 
-adc.o: adc.c
+adc.o: adc.c adc.h
 	avr-gcc -g -mmcu=atmega8 -Wall -Os -c adc.c
 
-uart.o: uart.c
+led.o: led.c led.h
+	avr-gcc -g -mmcu=atmega8 -Wall -Os -c led.c
+
+uart.o: uart.c uart.h
 	avr-gcc -g -mmcu=atmega8 -Wall -Os -c uart.c
 
 # Utils
@@ -37,6 +40,10 @@ erase:
 
 load: main.hex
 	avrdude -c avrispmkII -p m8 -e -U flash:w:main.hex
+
+# Don't verify
+loadn: main.hex
+	avrdude -c avrispmkII -p m8 -e -V -U flash:w:main.hex
 
 clean:
 	rm *.o *.out *.map *.hex

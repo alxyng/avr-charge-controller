@@ -1,2 +1,2 @@
 void adc_init();
-unsigned char adc_read();
+unsigned int adc_read(unsigned char channel);
