@@ -37,7 +37,6 @@ int main() {
                 // Discharge
                 led_set_charging(0);
                 led_set_charged(1);
-                direction = 1;
                 charging = 0;
             }
         } else {
@@ -45,7 +44,6 @@ int main() {
                 // Charge
                 led_set_charging(1);
                 led_set_charged(0);
-                direction = 0;
                 charging = 1;
             }
         }

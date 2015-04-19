@@ -1,0 +1,3 @@
+- Affects of cpu freq. on power consumption
+- PWM charging?
+- Voltage measurement averages
