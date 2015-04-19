@@ -26,6 +26,8 @@ int main() {
     float voltage;
     float float_voltage = 13.9;
 
+    unsigned int temp;
+
 	while (1) {
         voltage = map(adc_read(0), 0, 1023, 0.0, 20.0);
         if (voltage < float_voltage) {
@@ -39,7 +41,9 @@ int main() {
         }
         //printf("voltage: %.2f\n", voltage);
         // seems that when i enable another printf statement, it prints the right value for voltage...wierd...
-        printf("ADCH: %u, ADHL: %u, ADC: %u\n", ADCH, ADCL, ADC);
+        //printf("ADCH: %u, ADHL: %u, ADC: %u\n", ADCH, ADCL, ADC);
+        //printf("");
+        temp = ADC;
         _delay_ms(100);
     }
 
