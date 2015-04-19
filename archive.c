@@ -53,7 +53,7 @@ void configure_and_start_adc() {
     ADCSRA &= ~(1 << ADPS0);
     */
 
-    ADCSRA |= (1 << ADPS2); // ADC at 62.5KHz sample rate at 1MHz (prescalar at 16)
+    ADCSRA |= (1 << ADPS2) | (1 << ADPS2); // ADC at 125KHz sample rate at 8MHz (prescalar at 64)
     ADMUX |= (1 << REFS0); // Set reference voltage to AVCC
     ADMUX |= (1 << ADLAR); // Left adjust ADC result to allow easy 8 bit reading
 
