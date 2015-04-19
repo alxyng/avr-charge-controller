@@ -22,18 +22,18 @@ uart.o: uart.c
 
 # enable brown out detection at 2.7v and use 8MHz internal RC oscillator
 fuses:
-	avrdude -p m8 -c avrisp -b 19200 -P /dev/tty.usbserial-A7006RAS -U lfuse:w:0xA4:m -U hfuse:w:0xD9:m
+	avrdude -c avrispmkII -p m8 -U lfuse:w:0xA4:m -U hfuse:w:0xD9:m
 
 # default fuses
 fusesdefault:
-	avrdude -p m8 -c avrisp -b 19200 -P /dev/tty.usbserial-A7006RAS -U lfuse:w:0xE1:m -U hfuse:w:0xD9:m
+	avrdude -c avrispmkII -p m8 -U lfuse:w:0xE1:m -U hfuse:w:0xD9:m
 
 # erase
 erase:
-	avrdude -p m8 -c avrisp -b 19200 -P /dev/tty.usbserial-A7006RAS -e
+	avrdude -c avrispmkII -p m8 -e
 
 load: main.hex
-	avrdude -p m8 -c avrisp -b 19200 -P /dev/tty.usbserial-A7006RAS -e -U flash:w:main.hex
+	avrdude -c avrispmkII -p m8 -e -U flash:w:main.hex
 
 clean:
 	rm *.o *.out *.map *.hex
