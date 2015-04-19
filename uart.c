@@ -1,7 +1,7 @@
 #include <avr/io.h>
 #include <stdio.h>
 
-#define F_CPU 8000000UL
+#define F_CPU 4000000UL
 #define BAUD 19200 // Actually 38400 because U2X is set
 #define UBRR_VAL (F_CPU / (16UL * BAUD)) - 1
 

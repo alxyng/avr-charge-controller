@@ -5,7 +5,7 @@
 #include "led.h"
 #include "uart.h"
 
-#define F_CPU 8000000UL // 8 MHz
+#define F_CPU 4000000UL
 
 #include <util/delay.h>
 
