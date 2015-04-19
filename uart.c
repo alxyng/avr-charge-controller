@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 #define F_CPU 8000000UL
-#define BAUD 9600
+#define BAUD 19200 // Actually 38400 because U2X is set
 #define UBRR_VAL (F_CPU / (16UL * BAUD)) - 1
 
 void uart_init() {
@@ -16,8 +16,10 @@ void uart_init() {
         UCSRA &= ~(1 << U2X);
     #endif
     */
+    UCSRA |= (1 << U2X);
 
-    UCSRC = (1 << UCSZ1) | (1 << UCSZ0); // 8-bit data
+    // When first trying to use 9600 baud, URSEL bit wasnt set and the baud was 300
+    UCSRC = (1 << URSEL) | (1 << UCSZ1) | (1 << UCSZ0); // 8-bit data
     UCSRB = (1 << RXEN) | (1 << TXEN);   // Enable RX and TX
 }
 
