@@ -17,5 +17,5 @@ void adc_init() {
 }
 
 unsigned int adc_read(unsigned char channel) {
-	return (ADCH << 8) | ADCL;
+	return ADC;
 }
