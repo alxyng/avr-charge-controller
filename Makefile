@@ -10,7 +10,7 @@ main.hex: main.out
 	avr-objcopy -R .eeprom -O ihex main.out main.hex
 
 main.out: main.o uart.o
-	avr-gcc -g -mmcu=atmega8 -o main.out -Wl,-Map,main.map main.o uart.o
+	avr-gcc -g -mmcu=atmega8 -o main.out -Wl,-u,vfprintf -lprintf_flt -lm -Wl,-Map,main.map main.o uart.o
 
 main.o: main.c
 	avr-gcc -g -mmcu=atmega8 -Wall -Os -c main.c
