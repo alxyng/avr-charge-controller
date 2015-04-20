@@ -5,7 +5,9 @@
 #include "led.h"
 #include "uart.h"
 
+#ifndef F_CPU
 #define F_CPU 4000000UL
+#endif
 
 #include <util/delay.h>
 
@@ -20,15 +22,12 @@ int main() {
     adc_init();
 
     uart_init();
-    stdout = &uart_output;  // move to uart_init_stream?
-    stdin  = &uart_input;   // "
+    uart_enable_interrupts();
 
     float voltage;
     float float_voltage = 13.9;
     float hysteresis = 1.0;
-    //int direction = 0; // 0 = hit float voltage - hysteresis most resently, 1 = hit float voltage most recently
-    // how to init direction?
-    int charging = 0;
+    int charging = 1; // Charging by default if voltage is less than float_voltage
 
 	while (1) {
         voltage = map(adc_read(0), 0, 1023, 0.0, 19.67); // 100kohm, 33kohm 4.88 atmega vcc
@@ -47,9 +46,16 @@ int main() {
                 charging = 1;
             }
         }
-        printf("voltage: %.2f ", voltage);
-        printf(charging ? "(charging)\n" : "(discharging)\n");
-        _delay_ms(100);
+
+        if (uart_char_available()) {
+            unsigned char cmd = uart_getchar();
+            switch (cmd) {
+                case 'v':
+                    printf("voltage: %.2f ", voltage);
+                    printf(charging ? "(charging)\n" : "(discharging)\n");
+                    break;
+            }
+        }
     }
 
     return 0;

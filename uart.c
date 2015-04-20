@@ -1,29 +1,55 @@
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <stdio.h>
 
-#define F_CPU 4000000UL
-#define BAUD 19200 // Actually 38400 because U2X is set
-#define UBRR_VAL (F_CPU / (16UL * BAUD)) - 1
+#include "uart.h"
+
+#include <util/setbaud.h>
+
+FILE uart_input = FDEV_SETUP_STREAM(NULL, uart_getchar_stream, _FDEV_SETUP_READ);
+FILE uart_output = FDEV_SETUP_STREAM(uart_putchar_stream, NULL, _FDEV_SETUP_WRITE);
+
+unsigned char available;
+unsigned char uart_interrupt_char;
 
 void uart_init() {
-    UBRRH = (UBRR_VAL >> 8);
-    UBRRL = UBRR_VAL;
+    UBRRH = UBRRH_VALUE;
+    UBRRL = UBRRL_VALUE;
 
-    /*
     #if USE_2X
         UCSRA |= (1 << U2X);
     #else
         UCSRA &= ~(1 << U2X);
     #endif
-    */
-    UCSRA |= (1 << U2X);
 
     // When first trying to use 9600 baud, URSEL bit wasnt set and the baud was 300
     UCSRC = (1 << URSEL) | (1 << UCSZ1) | (1 << UCSZ0); // 8-bit data
     UCSRB = (1 << RXEN) | (1 << TXEN);   // Enable RX and TX
+
+    stdout = &uart_output;  // move to uart_init_stream?
+    stdin  = &uart_input;   // "
+}
+
+void uart_enable_interrupts() {
+    sei(); // Enable global interrupts
+    UCSRB |= (1 << RXCIE);
+}
+
+void uart_disable_interrupts() {
+    cli(); // Disable global interrupts
+    UCSRB &= ~(1 << RXCIE);
+}
+
+unsigned char uart_char_available() {
+    return available;
 }
 
 unsigned char uart_getchar() {
+    if (UCSRB & (1 << RXCIE)) {
+        available = 0;
+        return uart_interrupt_char;
+    }
+
     while (!(UCSRA & (1 << RXC))) {}    // Wait until RXC bit is set in UCSRA
     return UDR;
 }
@@ -42,4 +68,9 @@ void uart_putchar_stream(unsigned char c, FILE *stream) {
         uart_putchar_stream('\r', stream);
     }
     uart_putchar(c);
+}
+
+ISR(USART_RXC_vect) {
+    available = 1;
+    uart_interrupt_char = UDR;
 }

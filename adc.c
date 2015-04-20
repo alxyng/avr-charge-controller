@@ -1,5 +1,7 @@
 #include <avr/io.h>
 
+#include "adc.h"
+
 void adc_init() {
     ADCSRA |= (1 << ADPS2) | (1 << ADPS1); // ADC at 62.5KHz sample rate at 4MHz (prescalar at 64)
     ADMUX |= (1 << REFS0); // Set reference voltage to AVCC
