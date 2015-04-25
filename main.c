@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "adc.h"
+#include "charger.h"
 #include "led.h"
 #include "uart.h"
 #include "util.h"
@@ -24,11 +25,12 @@
 #define V_MAX   19.67   // 100kohm, 33kohm ATmega8 vcc 4.88
 
 int main(void) {
-    int charging = 1;   // Charging state, default 1 if v < V_FLT
-    float v;            // Current battery voltage
+    unsigned char charging = 1;     // Charging state, default 1 if v < V_FLT
+    float v;                        // Current battery voltage
 
-    led_init();
     adc_init();
+    charger_init();
+    led_init();
     uart_init();
     uart_enable_interrupts();
 
@@ -37,6 +39,7 @@ int main(void) {
         if (charging) {
             if (v > V_FLT) {
                 // Discharge
+                charger_stop();
                 led_charging_off();
                 led_charged_on();
                 charging = 0;
@@ -44,6 +47,7 @@ int main(void) {
         } else {
             if (v <= V_FLT - HYST) {
                 // Charge
+                charger_start();
                 led_charging_on();
                 led_charged_off();
                 charging = 1;
