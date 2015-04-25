@@ -10,7 +10,7 @@ FILE uart_output = FDEV_SETUP_STREAM(uart_putchar_stream, NULL, _FDEV_SETUP_WRIT
 static unsigned char available;
 static unsigned char uart_interrupt_char;
 
-void uart_init() {
+void uart_init(void) {
     UBRRH = UBRRH_VALUE;
     UBRRL = UBRRL_VALUE;
 
@@ -28,21 +28,21 @@ void uart_init() {
     stdin  = &uart_input;   // "
 }
 
-void uart_enable_interrupts() {
+void uart_enable_interrupts(void) {
     sei(); // Enable global interrupts
     UCSRB |= (1 << RXCIE);
 }
 
-void uart_disable_interrupts() {
+void uart_disable_interrupts(void) {
     cli(); // Disable global interrupts
     UCSRB &= ~(1 << RXCIE);
 }
 
-unsigned char uart_char_available() {
+unsigned char uart_char_available(void) {
     return available;
 }
 
-unsigned char uart_getchar() {
+unsigned char uart_getchar(void) {
     if (UCSRB & (1 << RXCIE)) {
         available = 0;
         return uart_interrupt_char;
@@ -68,7 +68,7 @@ void uart_putchar_stream(unsigned char c, FILE *stream) {
     uart_putchar(c);
 }
 
-void uart_handle_rxc_isr() {
+void uart_handle_rxc_isr(void) {
     available = 1;
     uart_interrupt_char = UDR;
 }

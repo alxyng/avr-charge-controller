@@ -13,14 +13,14 @@
 
 #include <util/setbaud.h>
 
-void uart_init();
-void uart_enable_interrupts();
-void uart_disable_interrupts();
-unsigned char uart_char_available();
-unsigned char uart_getchar();
+void uart_init(void);
+void uart_enable_interrupts(void);
+void uart_disable_interrupts(void);
+unsigned char uart_char_available(void);
+unsigned char uart_getchar(void);
 void uart_putchar(unsigned char c);
 unsigned char uart_getchar_stream(FILE *stream);
 void uart_putchar_stream(unsigned char c, FILE *stream);
-void uart_handle_rxc_isr();
+void uart_handle_rxc_isr(void);
 
 #endif /* UART_H_ */
