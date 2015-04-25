@@ -4,11 +4,11 @@
 #include <stdio.h>
 
 #ifndef F_CPU
-#define F_CPU 4000000UL
+#	define F_CPU 4000000UL
 #endif
 
 #ifndef BAUD
-#define BAUD 38400
+#	define BAUD 38400
 #endif
 
 #include <util/setbaud.h>

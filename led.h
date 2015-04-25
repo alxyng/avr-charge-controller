@@ -10,8 +10,25 @@
 #define PIN_LED_CHARGED    PORTC5
 #define DDRPIN_LED_CHARGED DDC5
 
-void led_init();
-void led_charging_set(int on);
-void led_charged_set(int on);
+inline void led_init(void) {
+    DDR_LED |= (1 << DDRPIN_LED_CHARGING); // Set charging LED pin as output
+    DDR_LED |= (1 << DDRPIN_LED_CHARGED); // Set charged LED pin as output
+}
+
+inline void led_charging_on(void) {
+    PORT_LED |= (1 << PIN_LED_CHARGING);
+}
+
+inline void led_charging_off(void) {
+    PORT_LED &= ~(1 << PIN_LED_CHARGING);
+}
+
+inline void led_charged_on(void) {
+    PORT_LED |= (1 << PIN_LED_CHARGED);
+}
+
+inline void led_charged_off(void) {
+    PORT_LED &= ~(1 << PIN_LED_CHARGED);
+}
 
 #endif /* LED_H_ */
