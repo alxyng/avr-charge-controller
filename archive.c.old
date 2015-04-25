@@ -22,11 +22,11 @@
 #define PORT_LED    PORTC
 #define DDR_LED     DDRC
 
-#define PIN_CHARGING_LED    PORTC3
-#define DDRPIN_CHARGING_LED DDC3
+#define PIN_LED_CHARGING    PORTC3
+#define DDRPIN_LED_CHARGING DDC3
 
-#define PIN_CHARGED_LED    PORTC2
-#define DDRPIN_CHARGED_LED DDC2
+#define PIN_LED_CHARGED    PORTC2
+#define DDRPIN_LED_CHARGED DDC2
 
 //#define LEDOUT PORTD5
 //#define LEDPORT PORTD
@@ -73,23 +73,23 @@ void configure_and_start_pwm() {
 }
 
 void charging_pin_configure() {
-    DDR_LED |= (1 << DDRPIN_CHARGING_LED); // Set charging LED pin as output
-    DDR_LED |= (1 << DDRPIN_CHARGED_LED); // Set charged LED pin as output
+    DDR_LED |= (1 << DDRPIN_LED_CHARGING); // Set charging LED pin as output
+    DDR_LED |= (1 << DDRPIN_LED_CHARGED); // Set charged LED pin as output
 }
 
-void set_charging_led(int on) {
+void charging_set_led(int on) {
     if (on) {
-        PORT_LED |= (1 << PIN_CHARGING_LED);
+        PORT_LED |= (1 << PIN_LED_CHARGING);
     } else {
-        PORT_LED &= ~(1 << PIN_CHARGING_LED);
+        PORT_LED &= ~(1 << PIN_LED_CHARGING);
     }
 }
 
-void set_charged_led(int on) {
+void charged_set_led(int on) {
     if (on) {
-        PORT_LED |= (1 << PIN_CHARGED_LED);
+        PORT_LED |= (1 << PIN_LED_CHARGED);
     } else {
-        PORT_LED &= ~(1 << PIN_CHARGED_LED);
+        PORT_LED &= ~(1 << PIN_LED_CHARGED);
     }
 }
 
@@ -141,8 +141,8 @@ int main() {
         _delay_ms(10);
         */
 
-        //set_charging_led(1);
-        //set_charging_led(0);
+        //charging_set_led(1);
+        //charging_set_led(0);
 
         /*
         LEDPORT|= (1<<LEDOUT);
@@ -151,8 +151,8 @@ int main() {
         delay_ms((255 - ADCH) / 15);
         */
 /*
-        set_charging_led(charging);
-        set_charged_led(!charging);
+        charging_set_led(charging);
+        charged_set_led(!charging);
 
         charging = !charging;
 
@@ -160,9 +160,9 @@ int main() {
 */
 /*
         if (ADCH < 128) {
-            PORT_LED  &= ~(1 << PIN_CHARGING_LED);
+            PORT_LED  &= ~(1 << PIN_LED_CHARGING);
         } else {
-            PORT_LED |= (1 << PIN_CHARGING_LED);
+            PORT_LED |= (1 << PIN_LED_CHARGING);
         }
 */
         //OCR1B = 127;
