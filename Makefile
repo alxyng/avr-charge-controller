@@ -24,8 +24,8 @@ main.hex: main.out
 	$(OUTSIZE) main.out
 	$(OBJ2HEX) -R .eeprom -O ihex main.out main.hex
 
-main.out: main.o adc.o uart.o
-	avr-gcc -std=c99 -g -mmcu=atmega8 -Os -o main.out -lm -Wl,-Map,main.map main.o adc.o uart.o
+main.out: main.o adc.o uart.o util.o
+	avr-gcc -std=c99 -g -mmcu=atmega8 -Os -o main.out -lm -Wl,-Map,main.map main.o adc.o uart.o util.o
 
 main.o: main.c util.h led.h
 	avr-gcc $(CFLAGS) -c main.c
@@ -35,6 +35,9 @@ adc.o: adc.c adc.h
 
 uart.o: uart.c uart.h
 	avr-gcc $(CFLAGS) -c uart.c
+
+util.o: util.c util.h
+	avr-gcc $(CFLAGS) -c util.c
 
 #%.obj : %.o $(OBJS)
 #	$(CC) $(CFLAGS) $(OBJS) -o $@
