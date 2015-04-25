@@ -6,7 +6,7 @@
 F_CPU = 4000000UL
 
 CC = avr-gcc
-CFLAGS = -g -mmcu=atmega8 -Wall -Os
+CFLAGS = -std=c99 -g -mmcu=atmega8 -Wall -Os
 
 OUTSIZE = avr-size
 OBJ2HEX = avr-objcopy
@@ -25,19 +25,19 @@ main.hex: main.out
 	$(OBJ2HEX) -R .eeprom -O ihex main.out main.hex
 
 main.out: main.o adc.o led.o uart.o
-	avr-gcc -g -mmcu=atmega8 -o main.out -Wl,-u,vfprintf -lprintf_flt -lm -Wl,-Map,main.map main.o adc.o led.o uart.o
+	avr-gcc -std=c99 -g -mmcu=atmega8 -Os -o main.out -Wl,-u,vfprintf -lprintf_flt -lm -Wl,-Map,main.map main.o adc.o led.o uart.o
 
-main.o: main.c
-	avr-gcc -g -mmcu=atmega8 -Wall -Os -c main.c
+main.o: main.c util.h
+	avr-gcc $(CFLAGS) -c main.c
 
 adc.o: adc.c adc.h
-	avr-gcc -g -mmcu=atmega8 -Wall -Os -c adc.c
+	avr-gcc $(CFLAGS) -c adc.c
 
 led.o: led.c led.h
-	avr-gcc -g -mmcu=atmega8 -Wall -Os -c led.c
+	avr-gcc $(CFLAGS) -c led.c
 
 uart.o: uart.c uart.h
-	avr-gcc -g -mmcu=atmega8 -Wall -Os -c uart.c
+	avr-gcc $(CFLAGS) -c uart.c
 
 #%.obj : %.o $(OBJS)
 #	$(CC) $(CFLAGS) $(OBJS) -o $@
@@ -47,27 +47,42 @@ uart.o: uart.c uart.h
 
 # Utils
 
-# enable brown out detection at 2.7v and use 8MHz internal RC oscillator
-fuses:
-	avrdude -c $(ISP) -p m8 -U lfuse:w:0xA4:m -U hfuse:w:0xD9:m
-
-fuses2:
-	avrdude -c $(ISP) -p m8 -U lfuse:w:0xAE:m -U hfuse:w:0xD9:m
-
-# default fuses
-fusesdefault:
+# DEFAULT - No brown out detection and use 1MHz internal RC oscillator
+fuses_default:
 	avrdude -c $(ISP) -p m8 -U lfuse:w:0xE1:m -U hfuse:w:0xD9:m
 
-# erase
+# Enable brown out detection at 2.7v and use 1MHz internal RC oscillator
+fuses_1mhzi_brownout:
+	avrdude -c $(ISP) -p m8 -U lfuse:w:0xA1:m -U hfuse:w:0xD9:m
+
+# Enable brown out detection at 2.7v and use 2MHz internal RC oscillator
+fuses_2mhzi_brownout:
+	avrdude -c $(ISP) -p m8 -U lfuse:w:0xA2:m -U hfuse:w:0xD9:m
+
+# Enable brown out detection at 2.7v and use 4MHz internal RC oscillator
+fuses_4mhzi_brownout:
+	avrdude -c $(ISP) -p m8 -U lfuse:w:0xA3:m -U hfuse:w:0xD9:m
+
+# Enable brown out detection at 2.7v and use 8MHz internal RC oscillator
+fuses_8mhzi_brownout:
+	avrdude -c $(ISP) -p m8 -U lfuse:w:0xA4:m -U hfuse:w:0xD9:m
+
+# Enable brown out detection at 2.7v and use 4MHz external crystal
+fuses_4mhze_brownout:
+	avrdude -c $(ISP) -p m8 -U lfuse:w:0xAE:m -U hfuse:w:0xD9:m
+
+# Erase
 erase:
 	avrdude -c $(ISP) -p m8 -e
 
+# Load
 load: main.hex
 	avrdude -c $(ISP) -p m8 -e -U flash:w:main.hex
 
-# Don't verify
-loadn: main.hex
+# Load but don't verify
+load_noverify: main.hex
 	avrdude -c $(ISP) -p m8 -e -V -U flash:w:main.hex
 
+# Clean build files
 clean:
 	rm *.o *.out *.map *.hex
