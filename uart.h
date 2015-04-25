@@ -11,6 +11,8 @@
 #define BAUD 38400
 #endif
 
+#include <util/setbaud.h>
+
 void uart_init();
 void uart_enable_interrupts();
 void uart_disable_interrupts();
@@ -19,5 +21,6 @@ unsigned char uart_getchar();
 void uart_putchar(unsigned char c);
 unsigned char uart_getchar_stream(FILE *stream);
 void uart_putchar_stream(unsigned char c, FILE *stream);
+void uart_handle_rxc_isr();
 
-#endif
+#endif /* UART_H_ */

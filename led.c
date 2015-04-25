@@ -2,22 +2,22 @@
 #include "led.h"
 
 void led_init() {
-    DDR_LED |= (1 << DDRPIN_CHARGING_LED); // Set charging LED pin as output
-    DDR_LED |= (1 << DDRPIN_CHARGED_LED); // Set charged LED pin as output
+    DDR_LED |= (1 << DDRPIN_LED_CHARGING); // Set charging LED pin as output
+    DDR_LED |= (1 << DDRPIN_LED_CHARGED); // Set charged LED pin as output
 }
 
-void led_set_charging(int on) {
+void led_charging_set(int on) {
     if (on) {
-        PORT_LED |= (1 << PIN_CHARGING_LED);
+        PORT_LED |= (1 << PIN_LED_CHARGING);
     } else {
-        PORT_LED &= ~(1 << PIN_CHARGING_LED);
+        PORT_LED &= ~(1 << PIN_LED_CHARGING);
     }
 }
 
-void led_set_charged(int on) {
+void led_charged_set(int on) {
     if (on) {
-        PORT_LED |= (1 << PIN_CHARGED_LED);
+        PORT_LED |= (1 << PIN_LED_CHARGED);
     } else {
-        PORT_LED &= ~(1 << PIN_CHARGED_LED);
+        PORT_LED &= ~(1 << PIN_LED_CHARGED);
     }
 }

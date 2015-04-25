@@ -4,23 +4,21 @@
 
 #include "uart.h"
 
-#include <util/setbaud.h>
-
 FILE uart_input = FDEV_SETUP_STREAM(NULL, uart_getchar_stream, _FDEV_SETUP_READ);
 FILE uart_output = FDEV_SETUP_STREAM(uart_putchar_stream, NULL, _FDEV_SETUP_WRITE);
 
-unsigned char available;
-unsigned char uart_interrupt_char;
+static unsigned char available;
+static unsigned char uart_interrupt_char;
 
 void uart_init() {
     UBRRH = UBRRH_VALUE;
     UBRRL = UBRRL_VALUE;
 
-    #if USE_2X
-        UCSRA |= (1 << U2X);
-    #else
-        UCSRA &= ~(1 << U2X);
-    #endif
+#if USE_2X
+    UCSRA |= (1 << U2X);
+#else
+    UCSRA &= ~(1 << U2X);
+#endif
 
     // When first trying to use 9600 baud, URSEL bit wasnt set and the baud was 300
     UCSRC = (1 << URSEL) | (1 << UCSZ1) | (1 << UCSZ0); // 8-bit data
@@ -70,7 +68,7 @@ void uart_putchar_stream(unsigned char c, FILE *stream) {
     uart_putchar(c);
 }
 
-ISR(USART_RXC_vect) {
+void uart_handle_rxc_isr() {
     available = 1;
     uart_interrupt_char = UDR;
 }

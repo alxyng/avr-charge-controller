@@ -4,6 +4,7 @@
 #include "adc.h"
 #include "led.h"
 #include "uart.h"
+#include "util.h"
 
 #ifndef F_CPU
 #define F_CPU 4000000UL
@@ -12,10 +13,6 @@
 #include <util/delay.h>
 
 // possible to store voltage as two uint8_ts in the future for performance and more space (no float to string conversion)
-
-float map(unsigned int input, unsigned int in_min, unsigned int in_max, float out_min, float out_max) {
-    return (((out_max - out_min) / (in_max - in_min)) * input) + in_min;
-}
 
 int main() {
     led_init();
@@ -34,15 +31,15 @@ int main() {
         if (charging) {
             if (voltage > float_voltage) {
                 // Discharge
-                led_set_charging(0);
-                led_set_charged(1);
+                led_charging_set(0);
+                led_charged_set(1);
                 charging = 0;
             }
         } else {
             if (voltage < float_voltage - hysteresis) {
                 // Charge
-                led_set_charging(1);
-                led_set_charged(0);
+                led_charging_set(1);
+                led_charged_set(0);
                 charging = 1;
             }
         }
@@ -59,4 +56,10 @@ int main() {
     }
 
     return 0;
+}
+
+/* Interrupt service routines */
+
+ISR(USART_RXC_vect) {
+    uart_handle_rxc_isr();
 }
