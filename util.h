@@ -9,7 +9,6 @@ inline float map(unsigned int input, unsigned int in_min, unsigned int in_max, f
 * Convert voltage float to voltage string
 * Stores result in buf. Max length of buf is 6 (5 characters + null)
 */
-
 void voltage_to_str(char *buf, float v);
 
 #endif /* UTIL_H_ */
