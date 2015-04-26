@@ -68,7 +68,7 @@ void uart_putchar_stream(unsigned char c, FILE *stream) {
     uart_putchar(c);
 }
 
-void uart_handle_rxc_isr(void) {
+ISR(USART_RXC_vect) {
     available = 1;
     uart_interrupt_char = UDR;
 }

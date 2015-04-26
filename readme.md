@@ -10,3 +10,4 @@ An AVR ATmega8 based charge controller for wind and solar charging of a lead-aci
 - Optimise Makefile
 - Lead acid battery charging algorithm?
 - Schematic
+- License

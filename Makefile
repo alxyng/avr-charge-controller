@@ -27,7 +27,7 @@ main.hex: main.out
 main.out: main.o adc.o uart.o util.o
 	avr-gcc -std=c99 -g -mmcu=atmega8 -Os -o main.out -lm -Wl,-Map,main.map main.o adc.o uart.o util.o
 
-main.o: main.c charger.h led.h util.h 
+main.o: main.c mosfet.h led.h util.h 
 	avr-gcc $(CFLAGS) -c main.c
 
 adc.o: adc.c adc.h

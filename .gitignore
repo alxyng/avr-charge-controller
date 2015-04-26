@@ -1,5 +1,8 @@
-*.o
 .DS_Store
+
+build/
+
+*.o
 main.hex
 main.map
 main.out
