@@ -9,9 +9,9 @@ inline void charger_init(void) {
 }
 
 inline void charger_start(void) {
-	PORT_MOSFET |= (1 << PIN_MOSFET);		// Turn MOSFET on
+	PORT_MOSFET &= ~(1 << PIN_MOSFET);		// Turn MOSFET off
 }
 
 inline void charger_stop(void) {
-	PORT_MOSFET &= ~(1 << PIN_MOSFET);		// Turn MOSFET off
+	PORT_MOSFET |= (1 << PIN_MOSFET);		// Turn MOSFET on
 }
